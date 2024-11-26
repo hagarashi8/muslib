@@ -1,0 +1,215 @@
+definitions:
+  PostRequest:
+    properties:
+      group:
+        example: Nothing More
+        type: string
+      song:
+        example: Angel song
+        type: string
+    required:
+    - group
+    - song
+    type: object
+  Song:
+    properties:
+      group:
+        example: Nothing More
+        type: string
+      id:
+        type: integer
+      link:
+        example: https://www.youtube.com/watch?v=WLJ9b6HIMHw
+        type: string
+      releaseDate:
+        example: "2024-05-17"
+        type: string
+      song:
+        example: Angel Song
+        type: string
+      text:
+        example: |-
+          (Hey, hey, hey)
+          (Hey, hey, hey)
+          Hey!
+
+          You can't deny you got that feeling in your bones
+          Ready to go
+          Are you ready to go?
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Музыкальная библиотека
+  version: "1.0"
+paths:
+  /song:
+    delete:
+      parameters:
+      - description: ID песни
+        in: query
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Удалить песню по Id
+      tags:
+      - Песни
+    get:
+      parameters:
+      - description: Исполнитель. Игнорирует регистр букв, для совпадения хватит части
+          имени/названия группы
+        in: query
+        name: group
+        type: string
+      - in: query
+        name: id
+        type: integer
+      - description: Страница. Нумерация начинается с 1
+        in: query
+        name: page
+        type: integer
+      - description: Размер страницы. Не может быть больше 100 или меньше 0
+        in: query
+        maximum: 100
+        name: pageSize
+        type: integer
+      - description: Даты должны быть в формате YYYY-MM-DD
+        in: query
+        name: releasedAfter
+        type: string
+      - description: Даты должны быть в формате YYYY-MM-DD
+        in: query
+        name: releasedBefore
+        type: string
+      - description: Название песни. Игнорирует регистр букв, для совпадения хватит
+          части названия
+        in: query
+        name: song
+        type: string
+      - description: Текст песни. Игнорирует регистр букв, для совпадения хватит части
+          тектса
+        in: query
+        name: text
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/Song'
+            type: array
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Найти песню
+      tags:
+      - Песни
+    patch:
+      parameters:
+      - in: query
+        name: group
+        type: string
+      - in: query
+        name: id
+        required: true
+        type: integer
+      - in: query
+        name: link
+        type: string
+      - in: query
+        name: releaseDate
+        type: string
+      - in: query
+        name: song
+        type: string
+      - in: query
+        name: text
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Исправить данные песни
+      tags:
+      - Песни
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Название и исполнитель
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/PostRequest'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Добавить песню по группе и названию
+      tags:
+      - Песни
+  /song/{id}:
+    get:
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Найти песню по ID
+      tags:
+      - Песни
+  /song/{id}/{part}:
+    get:
+      parameters:
+      - description: ID песни
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Номер фрагмента
+        in: path
+        name: part
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Найти фрагмент слов песни по ID и номеру фрагмента
+      tags:
+      - Песни
+swagger: "2.0"
