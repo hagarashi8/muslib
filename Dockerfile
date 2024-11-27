@@ -6,7 +6,6 @@ RUN go mod download && go mod verify
 
 COPY ./*.go ./
 COPY ./internal ./internal
-COPY ./envbinder ./envbinder
 RUN ["go", "build", "-v", "-o", "/usr/local/bin", "./..."]
 
 CMD [ "museff" ]

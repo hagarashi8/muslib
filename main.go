@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"museff/envbinder"
 	"museff/internal/app"
 	"strings"
 
+	"github.com/hagarashi8/go-envbinder"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
